@@ -36,55 +36,59 @@ function formatHoverDate(date) {
 
 // Quote Component с кнопкой "New Quote"
 // в App.js
+// Quote Component
+// Quote Component
 function Quote() {
-  const [quote, setQuote] = React.useState('');
-  const [author, setAuthor] = React.useState('');
+  const [quote, setQuote] = React.useState({ text: '', author: '' });
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
 
   const fetchQuote = async () => {
-  setLoading(true);
-  setError(false);
-  try {
-    const randomParam = Math.random();
-    const res = await fetch(
-      'https://api.allorigins.win/get?url=' +
-      encodeURIComponent('https://zenquotes.io/api/random') +
-      `?r=${randomParam}`
-    );
-    if (!res.ok) throw new Error('Network response was not ok');
+    setLoading(true);
+    setError(false);
+    try {
+      const randomParam = Math.random();
+      const res = await fetch(
+        'https://api.allorigins.win/get?url=' +
+        encodeURIComponent('https://zenquotes.io/api/random') +
+        `?r=${randomParam}`
+      );
+      if (!res.ok) throw new Error('Network response was not ok');
+      const data = await res.json();
+      const quoteData = JSON.parse(data.contents);
 
-    const data = await res.json();
-    const quoteData = JSON.parse(data.contents);
-    setQuote(quoteData[0].q);
-    setAuthor(quoteData[0].a);
-    setLoading(false);
-  } catch (err) {
-    console.error(err);
-    setError(true);
-    setLoading(false);
-  }
+      setQuote({ text: quoteData[0].q, author: quoteData[0].a });
+    } catch (err) {
+      console.error(err);
+      setError(true);
+      setQuote({
+        text: "Success is not final, failure is not fatal.",
+        author: "Winston Churchill"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-
-  React.useEffect(() => {
-    fetchQuote();
-  }, []);
+  React.useEffect(() => { fetchQuote(); }, []);
 
   return (
-    <div className="quote-box">
-      {loading && <p className="quote-text">Loading...</p>}
-      {error && <p className="quote-text error">Failed to load quote</p>}
-      {!loading && !error && (
+    <div className="quote-container">
+      {loading ? (
+        <p className="quote-text">Loading...</p>
+      ) : (
         <>
-          <p className="quote-text">“{quote}”</p>
-          <p className="quote-author">— {author}</p>
+          {error && <p className="quote-error">Failed to load, showing fallback</p>}
+          <p className="quote-text">“{quote.text}”</p>
+          <p className="quote-author">— {quote.author}</p>
         </>
       )}
       <button className="new-quote-btn" onClick={fetchQuote}>New Quote</button>
     </div>
   );
 }
+
+
 
 
 function App() {
@@ -100,6 +104,7 @@ function App() {
   oneYearAgo.setFullYear(today.getFullYear() - 1);
 
   // Load habits from localStorage
+  const [newHabitType, setNewHabitType] = useState('hours');
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('habits')) || [];
     setHabits(saved);
@@ -109,12 +114,13 @@ function App() {
     const name = newHabitName.trim();
     if (!name) return alert('Введите имя привычки');
     if (habits.find(h => h.name === name)) return alert('Привычка с таким именем уже есть!');
-    const newHabits = [...habits, { name, data: {} }];
+    const newHabits = [...habits, { name, type: newHabitType, data: {} }];
     setHabits(newHabits);
     localStorage.setItem('habits', JSON.stringify(newHabits));
     setNewHabitName('');
+    setNewHabitType('hours');
     setModalOpen(false);
-  }
+}
 
   function updateHabitData(habitIndex, dateKey, minutes) {
     const newHabits = [...habits];
@@ -251,7 +257,7 @@ function App() {
                   <div
                     key={`${weekIndex}-${dayIndex}`}
                     className="day"
-                    title={date ? `${formatHoverDate(date)}\nMinutes: ${minutes}` : ''}
+                    title={date ? `${formatHoverDate(date)}\n${habit.type === 'hours' ? 'Hours' : 'Amount'}: ${minutes}` : ''}
                     style={{ backgroundColor: getColor(minutes) }}
                     onClick={() => date && (setActiveHabit(index), setActiveDate(date), setInputMinutes(''))}
                   />
@@ -329,18 +335,27 @@ function App() {
               autoFocus
               onKeyDown={e => e.key === 'Enter' && addHabit()}
             />
+            <select
+              value={newHabitType}
+              onChange={e => setNewHabitType(e.target.value)}
+              style={{ marginBottom: '1rem', width: '100%', padding: '0.5rem', borderRadius: '5px', border: '1px solid #2f81f7', backgroundColor: '#0e1117', color: '#f0f0f0' }}
+            >
+              <option value="hours">Hours</option>
+              <option value="amount">Amount</option>
+            </select>
             <button onClick={addHabit}>Add</button>
             <button onClick={() => setModalOpen(false)}>Cancel</button>
           </div>
         </div>
       )}
 
+
       {activeDate !== null && (
         <div className="modal" style={{ backgroundColor: 'rgba(14,17,23,0.8)' }}>
           <div className="modal-content" style={{ width: '250px', textAlign: 'left' }} onClick={e => e.stopPropagation()}>
             <div style={{ marginBottom: '10px' }}><strong>Date:</strong> {formatHoverDate(activeDate)}</div>
             <div style={{ marginBottom: '10px' }}>
-              <strong>Minutes:</strong>
+              <strong>{activeHabit !== null ? (habits[activeHabit].type === 'hours' ? 'Hours' : 'Amount') : ''}:</strong>
               <input
                 type="number"
                 value={inputMinutes}
