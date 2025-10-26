@@ -216,6 +216,22 @@ function App() {
 
   function HabitCard({ habit, index, removeHabit }) {
     const [menuOpen, setMenuOpen] = useState(false);
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (!event.target.closest('.menu-btn') && !event.target.closest('.menu-dropdown')) {
+          setMenuOpen(false);
+        }
+      }
+
+      if (menuOpen) {
+        document.addEventListener('click', handleClickOutside);
+      }
+
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }, [menuOpen]);
+
     const [editMode, setEditMode] = useState(false);
     const [editedName, setEditedName] = useState(habit.name);
     const [isRemoving, setIsRemoving] = useState(false);
@@ -294,16 +310,24 @@ function App() {
           <div style={{ position: 'relative' }}>
             <button className="menu-btn" onClick={() => setMenuOpen(prev => !prev)}>⋮</button>
             {menuOpen && (
-              <div className="menu-dropdown">
-                <div onClick={() => {
+            <div className="menu-dropdown">
+              <div
+                className="menu-item edit"
+                onClick={() => {
                   setEditHabitIndex(index);
                   setEditHabitData({ name: habit.name, type: habit.type, color: habit.color });
                   setEditModalOpen(true);
                   setMenuOpen(false);
-                }}>Edit</div>
-                <div onClick={handleDelete}>Delete</div>
+                }}
+              >
+                ✏️ Edit
               </div>
-            )}
+              <div className="menu-item delete" onClick={handleDelete}>
+                🗑️ Delete
+              </div>
+            </div>
+          )}
+
           </div>
         </div>
 

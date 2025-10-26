@@ -477,3 +477,65 @@ button:active {
   border: 1px solid #2f81f7;
   border-radius: 5px;
 }
+
+.menu-dropdown {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background-color: #1b2029;
+  border: 1px solid #2f81f7;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 30;
+  min-width: 110px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  animation: dropdownFade 0.2s ease;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #ddd;
+  transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+  background-color: rgba(47, 129, 247, 0.1);
+  color: #2f81f7;
+}
+
+.menu-item.edit:hover {
+  background-color: rgba(47, 129, 247, 0.15);
+  color: #58a6ff;
+}
+
+.menu-item.delete:hover {
+  background-color: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+}
+
+.menu-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: #ccc;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.menu-btn:hover {
+  background-color: rgba(47, 129, 247, 0.1);
+  border-color: rgba(47, 129, 247, 0.3);
+  color: #2f81f7;
+}
