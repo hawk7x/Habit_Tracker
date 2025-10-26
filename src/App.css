@@ -419,7 +419,7 @@ button:active {
   margin-right: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem; /* расстояние между текстом, автором и кнопкой */
+  gap: 0.6rem; /* the distance between the text, author, and button */
   transition: all 0.3s ease;
 }
 
@@ -435,7 +435,7 @@ button:active {
 .quote-author {
   font-size: 1rem;
   color: #ccc;
-  align-self: flex-end; /* автор справа */
+  align-self: flex-end; /* the author is on the right */
   margin-top: 0.3rem;
   margin-bottom: 0.5rem;
   opacity: 0;
@@ -448,7 +448,7 @@ button:active {
 }
 
 .new-quote-btn {
-  align-self: flex-end; /* кнопка справа */
+  align-self: flex-end; /* the button on the right */
   padding: 0.4rem 0.9rem;
   font-size: 0.85rem;
   border: 1px solid #f7b12f;
@@ -457,7 +457,7 @@ button:active {
   background-color: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 0.3rem; /* небольшой отступ сверху */
+  margin-top: 0.3rem; /* a small margin at the top */
 }
 
 .new-quote-btn:hover {

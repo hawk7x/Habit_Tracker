@@ -16,13 +16,54 @@ function getDatesInRange(startDate, endDate) {
   return dates;
 }
 
-function getColor(minutes) {
+function getColor(minutes, habitData, baseColor = '#2ecc71') {
   if (!minutes) return '#222';
-  const maxMinutes = 60;
-  const hue = 120;
-  const lightness = 90 - Math.min(minutes / maxMinutes, 1) * 50;
-  return `hsl(${hue}, 70%, ${lightness}%)`;
+
+  const allValues = Object.values(habitData);
+  if (allValues.length === 0) return baseColor;
+
+  const max = Math.max(...allValues);
+  const ratio = max ? minutes / max : 0;
+
+  // Converting the color to HSL
+  const hsl = hexToHSL(baseColor);
+  const lightness = 90 - ratio * 50; // the higher the value, the darker
+
+  return `hsl(${hsl.h}, ${hsl.s}%, ${lightness}%)`;
 }
+
+// auxiliary function for HEX → HSL translation
+function hexToHSL(H) {
+  let r = 0, g = 0, b = 0;
+  if (H.length === 4) {
+    r = "0x" + H[1] + H[1];
+    g = "0x" + H[2] + H[2];
+    b = "0x" + H[3] + H[3];
+  } else if (H.length === 7) {
+    r = "0x" + H[1] + H[2];
+    g = "0x" + H[3] + H[4];
+    b = "0x" + H[5] + H[6];
+  }
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const cmin = Math.min(r,g,b);
+  const cmax = Math.max(r,g,b);
+  const delta = cmax - cmin;
+  let h = 0, s = 0, l = 0;
+  if (delta === 0) h = 0;
+  else if (cmax === r) h = ((g - b) / delta) % 6;
+  else if (cmax === g) h = (b - r) / delta + 2;
+  else h = (r - g) / delta + 4;
+  h = Math.round(h * 60);
+  if (h < 0) h += 360;
+  l = (cmax + cmin) / 2;
+  s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+  s = +(s * 100).toFixed(1);
+  l = +(l * 100).toFixed(1);
+  return { h, s, l };
+}
+
 
 function formatHoverDate(date) {
   if (!date) return '';
@@ -34,10 +75,6 @@ function formatHoverDate(date) {
   return `${dayName} ${day} ${month} ${year}`;
 }
 
-// Quote Component с кнопкой "New Quote"
-// в App.js
-// Quote Component
-// Quote Component
 function Quote() {
   const [quote, setQuote] = React.useState({ text: '', author: '' });
   const [loading, setLoading] = React.useState(true);
@@ -92,12 +129,21 @@ function Quote() {
 
 
 function App() {
+  const habitColors = [
+  { name: 'Green', value: '#2ecc71' },
+  { name: 'Blue', value: '#3498db' },
+  { name: 'Orange', value: '#f39c12' },
+  { name: 'Red', value: '#e74c3c' },
+  { name: 'Purple', value: '#9b59b6' },
+];
   const [habits, setHabits] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [newHabitName, setNewHabitName] = useState('');
   const [activeHabit, setActiveHabit] = useState(null);
   const [activeDate, setActiveDate] = useState(null);
   const [inputMinutes, setInputMinutes] = useState('');
+  const [newHabitColor, setNewHabitColor] = useState(habitColors[0].value);
+
 
   const today = new Date();
   const oneYearAgo = new Date(today);
@@ -114,7 +160,7 @@ function App() {
     const name = newHabitName.trim();
     if (!name) return alert('Введите имя привычки');
     if (habits.find(h => h.name === name)) return alert('Привычка с таким именем уже есть!');
-    const newHabits = [...habits, { name, type: newHabitType, data: {} }];
+    const newHabits = [...habits, { name, type: newHabitType, color: newHabitColor, data: {} }];
     setHabits(newHabits);
     localStorage.setItem('habits', JSON.stringify(newHabits));
     setNewHabitName('');
@@ -258,7 +304,7 @@ function App() {
                     key={`${weekIndex}-${dayIndex}`}
                     className="day"
                     title={date ? `${formatHoverDate(date)}\n${habit.type === 'hours' ? 'Hours' : 'Amount'}: ${minutes}` : ''}
-                    style={{ backgroundColor: getColor(minutes) }}
+                    style={{ backgroundColor: getColor(minutes, habit.data, habit.color) }}
                     onClick={() => date && (setActiveHabit(index), setActiveDate(date), setInputMinutes(''))}
                   />
                 );
@@ -299,7 +345,6 @@ function App() {
         </nav>
       </header>
 
-      {/* Quote сразу под меню */}
       <Quote />
 
       <main className="main-container">
@@ -343,6 +388,28 @@ function App() {
               <option value="hours">Hours</option>
               <option value="amount">Amount</option>
             </select>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>Choose color:</label>
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                {habitColors.map(c => (
+                  <div
+                    key={c.value}
+                    onClick={() => setNewHabitColor(c.value)}
+                    style={{
+                      width: '25px',
+                      height: '25px',
+                      borderRadius: '50%',
+                      backgroundColor: c.value,
+                      border: newHabitColor === c.value ? '3px solid #fff' : '2px solid #444',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
             <button onClick={addHabit}>Add</button>
             <button onClick={() => setModalOpen(false)}>Cancel</button>
           </div>
