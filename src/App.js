@@ -143,6 +143,10 @@ function App() {
   const [activeDate, setActiveDate] = useState(null);
   const [inputMinutes, setInputMinutes] = useState('');
   const [newHabitColor, setNewHabitColor] = useState(habitColors[0].value);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editHabitData, setEditHabitData] = useState({ name: '', type: 'hours', color: '' });
+  const [editHabitIndex, setEditHabitIndex] = useState(null);
+
 
 
   const today = new Date();
@@ -166,7 +170,23 @@ function App() {
     setNewHabitName('');
     setNewHabitType('hours');
     setModalOpen(false);
-}
+  }
+  function handleEditSave() {
+    if (editHabitIndex === null) return;
+    const updated = [...habits];
+    const { name, type, color } = editHabitData;
+    if (!name.trim()) return alert('Введите корректное имя привычки');
+    updated[editHabitIndex] = {
+      ...updated[editHabitIndex],
+      name: name.trim(),
+      type,
+      color
+    };
+    setHabits(updated);
+    localStorage.setItem('habits', JSON.stringify(updated));
+    setEditModalOpen(false);
+  }
+
 
   function updateHabitData(habitIndex, dateKey, minutes) {
     const newHabits = [...habits];
@@ -275,7 +295,12 @@ function App() {
             <button className="menu-btn" onClick={() => setMenuOpen(prev => !prev)}>⋮</button>
             {menuOpen && (
               <div className="menu-dropdown">
-                <div onClick={() => setEditMode(true)}>Edit</div>
+                <div onClick={() => {
+                  setEditHabitIndex(index);
+                  setEditHabitData({ name: habit.name, type: habit.type, color: habit.color });
+                  setEditModalOpen(true);
+                  setMenuOpen(false);
+                }}>Edit</div>
                 <div onClick={handleDelete}>Delete</div>
               </div>
             )}
@@ -368,6 +393,7 @@ function App() {
         </div>
       </main>
 
+      {/* --- МОДАЛКА СОЗДАНИЯ ПРИВЫЧКИ --- */}
       {modalOpen && (
         <div className="modal" onClick={() => setModalOpen(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -416,7 +442,7 @@ function App() {
         </div>
       )}
 
-
+      {/* --- МОДАЛКА ВВОДА МИНУТ --- */}
       {activeDate !== null && (
         <div className="modal" style={{ backgroundColor: 'rgba(14,17,23,0.8)' }}>
           <div className="modal-content" style={{ width: '250px', textAlign: 'left' }} onClick={e => e.stopPropagation()}>
@@ -438,7 +464,65 @@ function App() {
           </div>
         </div>
       )}
-    </div>
+
+      {/* --- МОДАЛКА РЕДАКТИРОВАНИЯ ПРИВЫЧКИ --- */}
+      {editModalOpen && (
+        <div className="modal" onClick={() => setEditModalOpen(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h2>Edit habit</h2>
+            <input
+              type="text"
+              value={editHabitData.name}
+              onChange={e => setEditHabitData({ ...editHabitData, name: e.target.value })}
+              placeholder="Enter habit name"
+              autoFocus
+              onKeyDown={e => e.key === 'Enter' && handleEditSave()}
+            />
+
+            <select
+              value={editHabitData.type}
+              onChange={e => setEditHabitData({ ...editHabitData, type: e.target.value })}
+              style={{
+                marginBottom: '1rem',
+                width: '100%',
+                padding: '0.5rem',
+                borderRadius: '5px',
+                border: '1px solid #2f81f7',
+                backgroundColor: '#0e1117',
+                color: '#f0f0f0'
+              }}
+            >
+              <option value="hours">Hours</option>
+              <option value="amount">Amount</option>
+            </select>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>Choose color:</label>
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                {habitColors.map(c => (
+                  <div
+                    key={c.value}
+                    onClick={() => setEditHabitData({ ...editHabitData, color: c.value })}
+                    style={{
+                      width: '25px',
+                      height: '25px',
+                      borderRadius: '50%',
+                      backgroundColor: c.value,
+                      border: editHabitData.color === c.value ? '3px solid #fff' : '2px solid #444',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <button onClick={handleEditSave}>Save</button>
+            <button onClick={() => setEditModalOpen(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+    </div> 
   );
 }
 
