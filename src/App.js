@@ -138,6 +138,8 @@ function App() {
 ];
   const [habits, setHabits] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [noteModalOpen, setNoteModalOpen] = useState(false);
+  const [noteData, setNoteData] = useState({ date: null, amount: 0, comment: "" });
   const [newHabitName, setNewHabitName] = useState('');
   const [activeHabit, setActiveHabit] = useState(null);
   const [activeDate, setActiveDate] = useState(null);
@@ -354,7 +356,15 @@ function App() {
                     className="day"
                     title={date ? `${formatHoverDate(date)}\n${habit.type === 'hours' ? 'Hours' : 'Amount'}: ${minutes}` : ''}
                     style={{ backgroundColor: getColor(minutes, habit.data, habit.color) }}
-                    onClick={() => date && (setActiveHabit(index), setActiveDate(date), setInputMinutes(''))}
+                    onClick={() => {
+                      if (!date) return;
+                      const key = formatDate(date);
+                      const currentAmount = habit.data[key] || 0;
+                      const currentComment = habit.comments?.[key] || "";
+                      setActiveHabit(index);
+                      setNoteData({ date, amount: currentAmount, comment: currentComment });
+                      setNoteModalOpen(true);
+                    }}
                   />
                 );
               })
@@ -379,6 +389,29 @@ function App() {
     setActiveDate(null);
     setInputMinutes('');
   }
+
+  function handleSaveNote() {
+  if (activeHabit === null || !noteData.date) return;
+
+  const dateKey = formatDate(noteData.date);
+  const updatedHabits = [...habits];
+  const habit = { ...updatedHabits[activeHabit] };
+
+  // обновляем значение
+  habit.data = { ...habit.data, [dateKey]: noteData.amount };
+
+  // добавляем комментарии, если их ещё нет
+  habit.comments = habit.comments || {};
+  habit.comments[dateKey] = noteData.comment;
+
+  updatedHabits[activeHabit] = habit;
+
+  setHabits(updatedHabits);
+  localStorage.setItem('habits', JSON.stringify(updatedHabits));
+
+  setNoteModalOpen(false);
+}
+
 
   return (
     <div className="App">
@@ -546,6 +579,56 @@ function App() {
           </div>
         </div>
       )}
+
+
+      {/* --- МОДАЛКА НОВОГО ТИПА (Amount + Комментарий) --- */}
+      {noteModalOpen && (
+        <div className="modal-overlay" onClick={() => setNoteModalOpen(false)}>
+          <div className="note-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>📅 {formatHoverDate(noteData.date)}</h3>
+
+            <p style={{ marginTop: "10px" }}>
+              <strong>Current:</strong> {noteData.amount}
+            </p>
+
+            <label style={{ display: "block", marginTop: "10px" }}>Change:</label>
+            <input
+              type="number"
+              value={noteData.amount}
+              onChange={(e) => setNoteData({ ...noteData, amount: parseFloat(e.target.value) || 0 })}
+              style={{
+                width: "100%",
+                marginTop: "5px",
+                padding: "8px",
+                borderRadius: "8px",
+                border: "1px solid #2f81f7",
+              }}
+            />
+
+            <label style={{ display: "block", marginTop: "10px" }}>Comment:</label>
+            <textarea
+              value={noteData.comment}
+              onChange={(e) => setNoteData({ ...noteData, comment: e.target.value })}
+              placeholder="How was your day?"
+              style={{
+                width: "100%",
+                marginTop: "5px",
+                padding: "8px",
+                borderRadius: "8px",
+                border: "1px solid #2f81f7",
+                resize: "none",
+                height: "70px",
+              }}
+            />
+
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px" }}>
+              <button onClick={handleSaveNote}>💾 Save</button>
+              <button onClick={() => setNoteModalOpen(false)}>✖ Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div> 
   );
 }
