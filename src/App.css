@@ -596,3 +596,117 @@ button:active {
   border-color: #2f81f7;
   background-color: #161b22;
 }
+
+/* ===== HEADER REWORK ===== */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #161b22;
+  padding: 0.8rem 1.5rem;
+  border: 1px solid #2d333b;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  transition: background 0.3s ease;
+}
+
+.top-bar:hover {
+  background-color: #1b2029;
+}
+
+/* --- logo --- */
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.logo-icon {
+  font-size: 1.3rem;
+}
+
+.logo-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2f81f7;
+  letter-spacing: 0.5px;
+}
+
+/* --- nav links --- */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.25s ease;
+}
+
+.nav-links a:hover {
+  color: #2f81f7;
+}
+
+/* --- right side --- */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* premium button */
+.upgrade-btn {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid #f7b12f;
+  color: #f7b12f;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upgrade-btn:hover {
+  background-color: #f7b12f;
+  color: #161b22;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(247, 177, 47, 0.3);
+}
+
+/* user avatar circle */
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #2f81f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(47, 129, 247, 0.6);
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .top-bar {
+    padding: 0.6rem 1rem;
+  }
+}

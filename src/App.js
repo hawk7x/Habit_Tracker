@@ -4,6 +4,8 @@ import './App.css';
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+
+
 function formatDate(date) {
   return date.toISOString().split('T')[0];
 }
@@ -416,16 +418,24 @@ function App() {
   return (
     <div className="App">
       <header className="top-bar">
-        <div>
-          <h1>✅ My habits</h1>
+        <div className="logo-area">
+          <div className="logo-icon"></div>
+          <h1 className="logo-text">My Habits</h1>
         </div>
-        <nav>
+
+        <nav className="nav-links">
           <a href="#profile">Profile</a>
           <a href="#premium">Premium</a>
-          <a href="#notion">Notion embeds</a>
+          <a href="#notion">Notion</a>
           <a href="#settings">Settings</a>
         </nav>
+
+        <div className="header-actions">
+          <button className="upgrade-btn">Upgrade</button>
+          <div className="user-avatar">S</div>
+        </div>
       </header>
+
 
       <Quote />
 
@@ -457,12 +467,18 @@ function App() {
             <h2>Create a new habit</h2>
             <input
               type="text"
-              value={newHabitName}
-              onChange={e => setNewHabitName(e.target.value)}
+              defaultValue={newHabitName}
+              onBlur={e => setNewHabitName(e.target.value)}
               placeholder="Enter habit name"
               autoFocus
-              onKeyDown={e => e.key === 'Enter' && addHabit()}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  setNewHabitName(e.target.value);
+                  addHabit();
+                }
+              }}
             />
+
             <select
               value={newHabitType}
               onChange={e => setNewHabitType(e.target.value)}
@@ -529,12 +545,18 @@ function App() {
             <h2>Edit habit</h2>
             <input
               type="text"
-              value={editHabitData.name}
-              onChange={e => setEditHabitData({ ...editHabitData, name: e.target.value })}
+              defaultValue={editHabitData.name}
+              onBlur={e => setEditHabitData({ ...editHabitData, name: e.target.value })}
               placeholder="Enter habit name"
               autoFocus
-              onKeyDown={e => e.key === 'Enter' && handleEditSave()}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  setEditHabitData({ ...editHabitData, name: e.target.value });
+                  handleEditSave();
+                }
+              }}
             />
+
 
             <select
               value={editHabitData.type}
