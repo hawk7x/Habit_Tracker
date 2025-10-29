@@ -338,62 +338,6 @@ button:active {
   box-shadow: none;
 }
 
-/* Quote styles */
-.quote-box {
-  background-color: #161b22;
-  border-left: 4px solid #2f81f7;
-  padding: 1rem 1.2rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-  max-width: 600px;
-  transition: background 0.2s ease;
-}
-
-.quote-box:hover {
-  background-color: #1b2029;
-}
-
-.quote-text {
-  font-size: 1rem;
-  color: #f0f0f0;
-  line-height: 1.4;
-}
-
-.quote-text.error {
-  color: #f75c5c;
-}
-
-.quote-author {
-  font-size: 0.9rem;
-  color: #ccc;
-  align-self: flex-end;
-  margin-top: 0.3rem;
-}
-
-.new-quote-btn {
-  align-self: flex-end;
-  margin-top: 0.5rem;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.85rem;
-  border: 1px solid #f7b12f;
-  color: #f7b12f;
-  border-radius: 5px;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.new-quote-btn:hover {
-  background-color: #f7b12f;
-  color: #161b22;
-  transform: translateY(-1px);
-}
-
-
 .menu-btn {
   font-size: 18px;
   padding: 3px 6px;
@@ -408,66 +352,8 @@ button:active {
   color: #2f81f7;
 }
 
-.quote-container {
-  background: linear-gradient(135deg, #1b2029, #161b22);
-  border-radius: 12px;
-  padding: 1.5rem 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem; /* the distance between the text, author, and button */
-  transition: all 0.3s ease;
-}
-
-.quote-text {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #f0f0f0;
-  margin: 0;
-  opacity: 0;
-  animation: fadeIn 0.5s forwards;
-}
-
-.quote-author {
-  font-size: 1rem;
-  color: #ccc;
-  align-self: flex-end; /* the author is on the right */
-  margin-top: 0.3rem;
-  margin-bottom: 0.5rem;
-  opacity: 0;
-  animation: fadeIn 0.5s 0.2s forwards;
-}
-
-.quote-error {
-  color: #f75c5c;
-  margin-bottom: 0.5rem;
-}
-
-.new-quote-btn {
-  align-self: flex-end; /* the button on the right */
-  padding: 0.4rem 0.9rem;
-  font-size: 0.85rem;
-  border: 1px solid #f7b12f;
-  color: #f7b12f;
-  border-radius: 6px;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 0.3rem; /* a small margin at the top */
-}
-
-.new-quote-btn:hover {
-  background-color: #f7b12f;
-  color: #161b22;
-  transform: translateY(-2px);
-}
-
 @keyframes fadeIn {
-  to { opacity: 1; }
+  to { opacity: 10; }
 }
 
 .modal-content select {

@@ -1,0 +1,65 @@
+.quote-container {
+  background: linear-gradient(135deg, #1b2029, #161b22);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem; /* the distance between the text, author, and button */
+  transition: all 0.3s ease;
+}
+
+.quote-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #f0f0f0;
+  margin: 0;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.quote-text.error {
+  color: #f75c5c;
+}
+
+.quote-author {
+  font-size: 1rem;
+  color: #ccc;
+  align-self: flex-end; /* the author is on the right */
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  animation: fadeIn 0.5s 0.2s forwards;
+}
+
+.new-quote-btn {
+  align-self: flex-end; /* the button on the right */
+  margin-top: 0.3rem; /* a small margin at the top */
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  border: 1px solid #f7b12f;
+  color: #f7b12f;
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.new-quote-btn:hover {
+  background-color: #f7b12f;
+  color: #161b22;
+  transform: translateY(-1px);
+}
+
+.quote-error {
+  color: #f75c5c;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes fadeIn {
+  to { opacity: 10; }
+}
