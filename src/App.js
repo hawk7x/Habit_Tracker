@@ -1,83 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Quote from './components/Quote';
 import Header from './components/Header';
+import HabitCard from './components/HabitCard';
+import { formatDate, getDatesInRange, formatHoverDate, getColor, monthNames, daysOfWeek } from "./utils/helpers";
 import './App.css';
-
-const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-
-
-function formatDate(date) {
-  return date.toISOString().split('T')[0];
-}
-
-function getDatesInRange(startDate, endDate) {
-  const dates = [];
-  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    dates.push(new Date(d));
-  }
-  return dates;
-}
-
-function getColor(minutes, habitData, baseColor = '#2ecc71') {
-  if (!minutes) return '#222';
-
-  const allValues = Object.values(habitData);
-  if (allValues.length === 0) return baseColor;
-
-  const max = Math.max(...allValues);
-  const ratio = max ? minutes / max : 0;
-
-  // Converting the color to HSL
-  const hsl = hexToHSL(baseColor);
-  const lightness = 90 - ratio * 50; // the higher the value, the darker
-
-  return `hsl(${hsl.h}, ${hsl.s}%, ${lightness}%)`;
-}
-
-// auxiliary function for HEX → HSL translation
-function hexToHSL(H) {
-  let r = 0, g = 0, b = 0;
-  if (H.length === 4) {
-    r = "0x" + H[1] + H[1];
-    g = "0x" + H[2] + H[2];
-    b = "0x" + H[3] + H[3];
-  } else if (H.length === 7) {
-    r = "0x" + H[1] + H[2];
-    g = "0x" + H[3] + H[4];
-    b = "0x" + H[5] + H[6];
-  }
-  r /= 255;
-  g /= 255;
-  b /= 255;
-  const cmin = Math.min(r,g,b);
-  const cmax = Math.max(r,g,b);
-  const delta = cmax - cmin;
-  let h = 0, s = 0, l = 0;
-  if (delta === 0) h = 0;
-  else if (cmax === r) h = ((g - b) / delta) % 6;
-  else if (cmax === g) h = (b - r) / delta + 2;
-  else h = (r - g) / delta + 4;
-  h = Math.round(h * 60);
-  if (h < 0) h += 360;
-  l = (cmax + cmin) / 2;
-  s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
-  s = +(s * 100).toFixed(1);
-  l = +(l * 100).toFixed(1);
-  return { h, s, l };
-}
-
-
-function formatHoverDate(date) {
-  if (!date) return '';
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const dayName = days[date.getDay()];
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = monthNames[date.getMonth()];
-  const year = date.getFullYear();
-  return `${dayName} ${day} ${month} ${year}`;
-}
 
 
 function App() {
@@ -168,169 +94,10 @@ function App() {
     return Math.round(values.reduce((a, b) => a + b, 0) / values.length);
   }
 
-  function HabitCard({ habit, index, removeHabit }) {
-    const [menuOpen, setMenuOpen] = useState(false);
-    useEffect(() => {
-      function handleClickOutside(event) {
-        if (!event.target.closest('.menu-btn') && !event.target.closest('.menu-dropdown')) {
-          setMenuOpen(false);
-        }
-      }
+  
+  <HabitCard />
 
-      if (menuOpen) {
-        document.addEventListener('click', handleClickOutside);
-      }
 
-      return () => {
-        document.removeEventListener('click', handleClickOutside);
-      };
-    }, [menuOpen]);
-
-    const [editMode, setEditMode] = useState(false);
-    const [editedName, setEditedName] = useState(habit.name);
-    const [isRemoving, setIsRemoving] = useState(false);
-
-    const dates = getDatesInRange(oneYearAgo, today);
-
-    const weeks = [];
-    let currentWeek = [];
-    dates.forEach(date => {
-      const dow = date.getDay() || 7;
-      if (dow === 1 && currentWeek.length) {
-        weeks.push(currentWeek);
-        currentWeek = [];
-      }
-      currentWeek.push(date);
-    });
-    if (currentWeek.length) weeks.push(currentWeek);
-
-    const weeksCount = weeks.length;
-    const daysCount = 7;
-
-    const matrix = [];
-    for (let day = 1; day <= daysCount; day++) {
-      const row = [];
-      for (let week = 0; week < weeksCount; week++) {
-        const dayObj = weeks[week].find(d => (d.getDay() || 7) === day);
-        row.push(dayObj || null);
-      }
-      matrix.push(row);
-    }
-
-    const monthLabels = [];
-    const addedMonths = new Set();
-    weeks.forEach((week, weekIndex) => {
-      week.forEach(date => {
-        const month = date.getMonth();
-        if (date.getDay() === 1 && !addedMonths.has(month)) {
-          monthLabels.push({ name: monthNames[month], col: weekIndex + 2 });
-          addedMonths.add(month);
-        }
-      });
-    });
-
-    function handleEdit() {
-      if (!editedName.trim()) return alert('Введите корректное имя');
-      const newHabits = [...habits];
-      newHabits[index].name = editedName.trim();
-      setHabits(newHabits);
-      localStorage.setItem('habits', JSON.stringify(newHabits));
-      setEditMode(false);
-      setMenuOpen(false);
-    }
-
-    function handleDelete() {
-      if (!window.confirm(`Удалить привычку "${habit.name}"?`)) return;
-      setIsRemoving(true);
-      setTimeout(() => removeHabit(index), 300);
-      setMenuOpen(false);
-    }
-
-    return (
-      <div className={`habit ${isRemoving ? 'removing' : ''}`}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {editMode ? (
-            <input
-              type="text"
-              value={editedName}
-              onChange={e => setEditedName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleEdit()}
-              autoFocus
-              style={{ flex: 1, marginRight: '5px', padding: '3px 5px', borderRadius: '5px', border: '1px solid #2f81f7' }}
-            />
-          ) : (
-            <h2>{habit.name}</h2>
-          )}
-          <div style={{ position: 'relative' }}>
-            <button className="menu-btn" onClick={() => setMenuOpen(prev => !prev)}>⋮</button>
-            {menuOpen && (
-            <div className="menu-dropdown">
-              <div
-                className="menu-item edit"
-                onClick={() => {
-                  setEditHabitIndex(index);
-                  setEditHabitData({ name: habit.name, type: habit.type, color: habit.color });
-                  setEditModalOpen(true);
-                  setMenuOpen(false);
-                }}
-              >
-                ✏️ Edit
-              </div>
-              <div className="menu-item delete" onClick={handleDelete}>
-                🗑️ Delete
-              </div>
-            </div>
-          )}
-
-          </div>
-        </div>
-
-        <div className="months-row" style={{ display: 'grid', gridTemplateColumns: `30px repeat(${weeksCount}, 16px)`, columnGap: '2px', marginBottom: '5px' }}>
-          <div></div>
-          {monthLabels.map((m, idx) => (
-            <div key={idx} className="month-label" style={{ gridColumnStart: m.col }}>{m.name}</div>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', gap: '4px' }}>
-          <div className="days-column">
-            {daysOfWeek.map((d, i) => <div key={i} className="day-label">{d}</div>)}
-          </div>
-          <div style={{ display: 'grid', gridTemplateRows: `repeat(7,16px)`, gridTemplateColumns: `repeat(${weeksCount},16px)`, columnGap: '2px', rowGap: '2px' }}>
-            {Array.from({ length: daysCount }).flatMap((_, dayIndex) =>
-              Array.from({ length: weeksCount }).map((_, weekIndex) => {
-                const date = matrix[dayIndex][weekIndex];
-                const key = date ? formatDate(date) : null;
-                const minutes = key && habit.data[key] ? habit.data[key] : 0;
-                return (
-                  <div
-                    key={`${weekIndex}-${dayIndex}`}
-                    className="day"
-                    title={date ? `${formatHoverDate(date)}\n${habit.type === 'hours' ? 'Hours' : 'Amount'}: ${minutes}` : ''}
-                    style={{ backgroundColor: getColor(minutes, habit.data, habit.color) }}
-                    onClick={() => {
-                      if (!date) return;
-                      const key = formatDate(date);
-                      const currentAmount = habit.data[key] || 0;
-                      const currentComment = habit.comments?.[key] || "";
-                      setActiveHabit(index);
-                      setNoteData({ date, amount: currentAmount, comment: currentComment });
-                      setNoteModalOpen(true);
-                    }}
-                  />
-                );
-              })
-            )}
-          </div>
-        </div>
-
-        <div className="stats">
-          <p><span className="label">Streak:</span> <span className="value">{calculateStreak(habit.data)} days</span></p>
-          <p><span className="label">Average:</span> <span className="value">{calculateAverage(habit.data)} minutes</span></p>
-        </div>
-      </div>
-    );
-  }
 
   function handleSave() {
     if (activeHabit === null || !activeDate) return;
@@ -381,13 +148,24 @@ function App() {
               key={habit.name}
               habit={habit}
               index={index}
+              habits={habits}
+              setHabits={setHabits}
               removeHabit={(i) => {
                 const newHabits = habits.filter((_, idx) => idx !== i);
                 setHabits(newHabits);
                 localStorage.setItem('habits', JSON.stringify(newHabits));
               }}
+              setEditHabitIndex={setEditHabitIndex}
+              setEditHabitData={setEditHabitData}
+              setEditModalOpen={setEditModalOpen}
+              setNoteModalOpen={setNoteModalOpen}
+              setNoteData={setNoteData}
+              setActiveHabit={setActiveHabit}
+              calculateStreak={calculateStreak}   
+              calculateAverage={calculateAverage} 
             />
           ))}
+
         </div>
       </main>
 
