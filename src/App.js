@@ -94,11 +94,6 @@ function App() {
     return Math.round(values.reduce((a, b) => a + b, 0) / values.length);
   }
 
-  
-  <HabitCard />
-
-
-
   function handleSave() {
     if (activeHabit === null || !activeDate) return;
     const min = parseInt(inputMinutes);

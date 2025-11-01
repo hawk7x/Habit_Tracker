@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { formatDate, getDatesInRange, formatHoverDate, getColor, monthNames, daysOfWeek } from "../utils/helpers";
+import './HabitCard.css';
 
 function HabitCard({
   habit,
