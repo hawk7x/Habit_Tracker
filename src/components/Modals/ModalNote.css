@@ -1,0 +1,45 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.note-modal {
+  background: #1b1f27;
+  color: #f0f0f0;
+  border-radius: 15px;
+  padding: 25px;
+  width: 350px;
+  max-width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: popIn 0.3s ease;
+}
+
+.note-modal h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.note-modal input,
+.note-modal textarea {
+  background-color: #0d1117;
+  color: #f0f0f0;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.note-modal input:focus,
+.note-modal textarea:focus {
+  border-color: #2f81f7;
+  background-color: #161b22;
+}
