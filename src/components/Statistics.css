@@ -1,0 +1,29 @@
+.statistics-container {
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.summary {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.chart-title {
+  margin: 20px 0 10px 0;
+  font-weight: 600;
+}
+
+.empty {
+  font-style: italic;
+  color: gray;
+}

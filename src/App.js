@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Quote from "./components/Quote";
 import HabitList from "./components/HabitList";
+import Statistics from "./components/Statistics";
 import ModalCreateHabit from "./components/Modals/ModalCreateHabit";
 import ModalEditHabit from "./components/Modals/ModalEditHabit";
 import ModalMinutesInput from "./components/Modals/ModalMinutesInput";
 import ModalNote from "./components/Modals/ModalNote";
 import { formatDate, getDatesInRange } from "./utils/helpers";
+import { auth, signOut } from "./firebase";
+import Login from "./components/Login";
 import "./App.css";
 
 function App() {
@@ -31,6 +34,14 @@ function App() {
   const [editHabitData, setEditHabitData] = useState({ name: "", type: "hours", color: "" });
   const [editHabitIndex, setEditHabitIndex] = useState(null);
   const [newHabitType, setNewHabitType] = useState("hours");
+  const [showStats, setShowStats] = useState(false);
+
+
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
+
 
   const today = new Date();
   const oneYearAgo = new Date(today);
@@ -114,28 +125,66 @@ function App() {
     setNoteModalOpen(false);
   }
 
+  if (!user) {
+    return <Login onLogin={setUser} />;
+  }
+
   return (
     <div className="App">
       <Header />
+
+      {user && (
+        <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px" }}>
+          <button
+            onClick={() => {
+              signOut(auth);
+              localStorage.removeItem("user");
+              setUser(null);
+            }}
+            style={{
+              backgroundColor: "#e74c3c",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              padding: "8px 14px",
+              cursor: "pointer",
+            }}
+          >
+            🚪 Logout
+          </button>
+        </div>
+      )}
+
+
       <Quote />
 
       <main className="main-container">
         <div className="controls">
           <button onClick={() => setModalOpen(true)}>➕ Create habit</button>
         </div>
+        <button onClick={() => setShowStats(!showStats)}>
+          {showStats ? "🏠 Home" : "📊 Statistics"}
+        </button>
 
-        <HabitList
-          habits={habits}
-          setHabits={setHabits}
-          setEditHabitIndex={setEditHabitIndex}
-          setEditHabitData={setEditHabitData}
-          setEditModalOpen={setEditModalOpen}
-          setNoteModalOpen={setNoteModalOpen}
-          setNoteData={setNoteData}
-          setActiveHabit={setActiveHabit}
-          calculateStreak={calculateStreak}
-          calculateAverage={calculateAverage}
-        />
+        {showStats ? (
+          <Statistics habits={habits} />
+        ) : (
+          <HabitList
+            habits={habits}
+            setHabits={setHabits}
+            setEditHabitIndex={setEditHabitIndex}
+            setEditHabitData={setEditHabitData}
+            setEditModalOpen={setEditModalOpen}
+            setNoteModalOpen={setNoteModalOpen}
+            setNoteData={setNoteData}
+            setActiveHabit={setActiveHabit}
+            calculateStreak={calculateStreak}
+            calculateAverage={calculateAverage}
+          />
+        )}
+
+
+
       </main>
 
       {modalOpen && (
