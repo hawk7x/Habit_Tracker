@@ -1,7 +1,7 @@
-import React from 'react';
-import './Header.css';
+import React from "react";
+import "./Header.css";
 
-function Header() {
+function Header({ onShowHome, onShowStats, onShowProfile }) {
   return (
     <header className="top-bar">
       <div className="logo-area">
@@ -10,10 +10,9 @@ function Header() {
       </div>
 
       <nav className="nav-links">
-        <a href="#profile">Profile</a>
-        <a href="#premium">Premium</a>
-        <a href="#notion">Notion</a>
-        <a href="#settings">Settings</a>
+        <button onClick={onShowHome}>🏠 Home</button>
+        <button onClick={onShowStats}>📊 Statistics</button>
+        <button onClick={onShowProfile}>👤 Profile</button>
       </nav>
 
       <div className="header-actions">

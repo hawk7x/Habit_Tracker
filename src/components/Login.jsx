@@ -5,6 +5,8 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore"; // adding
+import { db } from "../firebase"; // adding
 import "./Login.css";
 
 export default function Login({ onLogin }) {
@@ -13,11 +15,30 @@ export default function Login({ onLogin }) {
   const [isRegister, setIsRegister] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // ✅ Function creates a profile in Firestore, if there is no 
+  async function ensureUserProfile(user) {
+    const docRef = doc(db, "profiles", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      await setDoc(docRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || "",
+        photoURL: user.photoURL || "",
+        createdAt: new Date().toISOString(),
+      });
+    }
+  }
+
+  // 🔹 Google login
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
+
+      await ensureUserProfile(user); // creating a profile
       localStorage.setItem("user", JSON.stringify(user));
       onLogin(user);
     } catch (err) {
@@ -28,6 +49,7 @@ export default function Login({ onLogin }) {
     }
   };
 
+  // 🔹 Email login / register
   const handleEmailLogin = async () => {
     setLoading(true);
     try {
@@ -36,6 +58,8 @@ export default function Login({ onLogin }) {
         : await signInWithEmailAndPassword(auth, email, password);
 
       const user = userCredential.user;
+
+      await ensureUserProfile(user); // creating a profile
       localStorage.setItem("user", JSON.stringify(user));
       onLogin(user);
     } catch (err) {

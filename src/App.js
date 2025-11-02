@@ -8,7 +8,8 @@ import ModalCreateHabit from "./components/Modals/ModalCreateHabit";
 import ModalEditHabit from "./components/Modals/ModalEditHabit";
 import ModalMinutesInput from "./components/Modals/ModalMinutesInput";
 import ModalNote from "./components/Modals/ModalNote";
-import Login from "./components/Login"; // наш компонент Login
+import Login from "./components/Login"; // Login component
+import Profile from "./components/Profile";
 import { auth, db } from "./firebase";
 import { signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -43,6 +44,7 @@ function App() {
   const [editHabitIndex, setEditHabitIndex] = useState(null);
   const [newHabitType, setNewHabitType] = useState("hours");
   const [showStats, setShowStats] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const today = new Date();
   const oneYearAgo = new Date(today);
@@ -170,22 +172,30 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
-      <Quote />
+      <Header 
+        onShowHome={() => { setShowStats(false); setShowProfile(false); }}
+        onShowStats={() => { setShowStats(true); setShowProfile(false); }}
+        onShowProfile={() => { setShowProfile(true); }}
+      />
+
+      {/* Показываем цитату и кнопку "Create habit" только на Home */}
+      {!showStats && !showProfile && <Quote />}
 
       <div style={{ textAlign: "right", padding: "10px" }}>
         <button onClick={handleLogout}>Logout</button>
       </div>
 
       <main className="main-container">
-        <div className="controls">
-          <button onClick={() => setModalOpen(true)}>➕ Create habit</button>
-        </div>
-        <button onClick={() => setShowStats(!showStats)}>
-          {showStats ? "🏠 Home" : "📊 Statistics"}
-        </button>
+        {!showStats && !showProfile && (
+          <div className="controls">
+            <button onClick={() => setModalOpen(true)}>➕ Create habit</button>
+          </div>
+        )}
 
-        {showStats ? (
+
+        {showProfile ? (
+          <Profile user={user} />
+        ) : showStats ? (
           <Statistics habits={habits} />
         ) : (
           <HabitList
@@ -201,6 +211,7 @@ function App() {
             calculateAverage={calculateAverage}
           />
         )}
+
       </main>
 
       {modalOpen && (
