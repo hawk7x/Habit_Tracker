@@ -173,6 +173,7 @@ function App() {
   return (
     <div className="App">
       <Header 
+        user={user}
         onShowHome={() => { setShowStats(false); setShowProfile(false); }}
         onShowStats={() => { setShowStats(true); setShowProfile(false); }}
         onShowProfile={() => { setShowProfile(true); }}

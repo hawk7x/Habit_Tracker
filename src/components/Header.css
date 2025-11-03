@@ -67,3 +67,22 @@
   color: #f39c12;
   transform: scale(1.05);
 }
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #3498db;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.user-avatar:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}

@@ -1,7 +1,11 @@
 import React from "react";
 import "./Header.css";
 
-function Header({ onShowHome, onShowStats, onShowProfile }) {
+function Header({ onShowHome, onShowStats, onShowProfile, user }) {
+  // to get the first digit of an email or displayName
+  const initial =
+    (user?.displayName?.[0] || user?.email?.[0] || "?").toUpperCase();
+
   return (
     <header className="top-bar">
       <div className="logo-area">
@@ -17,7 +21,9 @@ function Header({ onShowHome, onShowStats, onShowProfile }) {
 
       <div className="header-actions">
         <button className="upgrade-btn">Upgrade</button>
-        <div className="user-avatar">S</div>
+        <div className="user-avatar" onClick={onShowProfile}>
+          {initial}
+        </div>
       </div>
     </header>
   );
