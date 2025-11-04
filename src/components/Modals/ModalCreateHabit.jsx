@@ -3,12 +3,15 @@ import './Modal.css';
 
 function ModalCreateHabit({
   habitColors,
+  habitCategories, // ✅ category
   newHabitName,
   setNewHabitName,
   newHabitType,
   setNewHabitType,
   newHabitColor,
   setNewHabitColor,
+  newHabitCategory, // ✅ category
+  setNewHabitCategory, // ✅ category
   addHabit,
   onClose,
 }) {
@@ -46,6 +49,25 @@ function ModalCreateHabit({
           <option value="hours">Hours</option>
           <option value="amount">Amount</option>
         </select>
+
+        <select
+          value={newHabitCategory}
+          onChange={(e) => setNewHabitCategory(e.target.value)}
+          style={{
+            marginBottom: "1rem",
+            width: "100%",
+            padding: "0.5rem",
+            borderRadius: "5px",
+            border: "1px solid #2f81f7",
+            backgroundColor: "#0e1117",
+            color: "#f0f0f0",
+          }}
+        >
+          {habitCategories.map((c) => (
+            <option key={c.value} value={c.value}>{c.name}</option>
+          ))}
+        </select>
+
 
         <div style={{ marginBottom: "1rem" }}>
           <label style={{ display: "block", marginBottom: "0.5rem" }}>Choose color:</label>

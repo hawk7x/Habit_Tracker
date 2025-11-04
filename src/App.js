@@ -25,6 +25,14 @@ function App() {
     { name: "Purple", value: "#9b59b6" },
   ];
 
+  const habitCategories = [
+    { name: "Health", value: "health" },
+    { name: "Study", value: "study" },
+    { name: "Work", value: "work" },
+    { name: "Finance", value: "finance" },
+    { name: "Self-development", value: "self" },
+  ];
+
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem("user");
     return saved ? JSON.parse(saved) : null;
@@ -43,6 +51,7 @@ function App() {
   const [editHabitData, setEditHabitData] = useState({ name: "", type: "hours", color: "" });
   const [editHabitIndex, setEditHabitIndex] = useState(null);
   const [newHabitType, setNewHabitType] = useState("hours");
+  const [newHabitCategory, setNewHabitCategory] = useState(habitCategories[0].value);
   const [showStats, setShowStats] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
@@ -89,7 +98,11 @@ function App() {
     if (!name) return alert("Enter the name of the habit");
     if (habits.find((h) => h.name === name)) return alert("There is already a habit with that name!");
 
-    const newHabits = [...habits, { name, type: newHabitType, color: newHabitColor, data: {} }];
+    const newHabits = [
+      ...habits,
+      { name, type: newHabitType, color: newHabitColor, category: newHabitCategory, data: {} }
+    ];
+
     setHabits(newHabits);
     saveHabitsToFirestore(newHabits);
     setNewHabitName("");
@@ -100,9 +113,9 @@ function App() {
   function handleEditSave() {
     if (editHabitIndex === null) return;
     const updated = [...habits];
-    const { name, type, color } = editHabitData;
+    const { name, type, color, category } = editHabitData;
     if (!name.trim()) return alert("Enter the correct habit name");
-    updated[editHabitIndex] = { ...updated[editHabitIndex], name: name.trim(), type, color };
+    updated[editHabitIndex] = { ...updated[editHabitIndex], name: name.trim(), type, color, category };
     setHabits(updated);
     saveHabitsToFirestore(updated);
     setEditModalOpen(false);
@@ -179,12 +192,12 @@ function App() {
         onShowProfile={() => { setShowProfile(true); }}
       />
 
-      {/* Показываем цитату и кнопку "Create habit" только на Home */}
-      {!showStats && !showProfile && <Quote />}
-
       <div style={{ textAlign: "right", padding: "10px" }}>
         <button onClick={handleLogout}>Logout</button>
       </div>
+
+      {/* Показываем цитату и кнопку "Create habit" только на Home */}
+      {!showStats && !showProfile && <Quote />}
 
       <main className="main-container">
         {!showStats && !showProfile && (
@@ -218,12 +231,15 @@ function App() {
       {modalOpen && (
         <ModalCreateHabit
           habitColors={habitColors}
+          habitCategories={habitCategories}  // ✅ category
           newHabitName={newHabitName}
           setNewHabitName={setNewHabitName}
           newHabitType={newHabitType}
           setNewHabitType={setNewHabitType}
           newHabitColor={newHabitColor}
           setNewHabitColor={setNewHabitColor}
+          newHabitCategory={newHabitCategory}  // ✅ category
+          setNewHabitCategory={setNewHabitCategory}  // ✅ category
           addHabit={addHabit}
           onClose={() => setModalOpen(false)}
         />
@@ -244,6 +260,7 @@ function App() {
       {editModalOpen && (
         <ModalEditHabit
           habitColors={habitColors}
+          habitCategories={habitCategories}  // ✅ category
           editHabitData={editHabitData}
           setEditHabitData={setEditHabitData}
           onSave={handleEditSave}

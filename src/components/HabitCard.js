@@ -93,6 +93,13 @@ function HabitCard({
     <div className={`habit ${isRemoving ? "removing" : ""}`}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h2>{habit.name}</h2>
+        <p style={{
+          fontSize: "0.8rem",
+          color: "#ccc",
+          marginTop: "-5px",
+          marginBottom: "8px",
+        }}>
+        </p>
         <div style={{ position: "relative" }}>
           <button className="menu-btn" onClick={() => setMenuOpen((prev) => !prev)}>
             ⋮

@@ -1,5 +1,83 @@
+/* src/components/HabitList.css */
+
 #habit-list {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 20px;
+  padding: 10px;
+}
+
+/* 🌙 Элегантный стиль категорий */
+.habit-category {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+/* ✨ Легкий hover — светлая рамка + небольшое поднятие */
+.habit-category:hover {
+  border-color: rgba(0, 150, 255, 0.3);
+  box-shadow: 0 0 12px rgba(0, 150, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Заголовок категории */
+.habit-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.habit-category-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.habit-category-icon {
+  font-size: 1.6rem;
+  margin-right: 10px;
+}
+
+.habit-category-title {
+  font-weight: 600;
+  font-size: 1.15rem;
+  flex: 1;
+  color: #eaeaea;
+  letter-spacing: 0.3px;
+}
+
+.habit-category-toggle {
+  font-size: 1rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+  color: #888;
+}
+
+/* 🔄 Плавное вращение стрелки при раскрытии */
+.habit-category.open .habit-category-toggle {
+  transform: rotate(180deg);
+  color: #2f81f7;
+}
+
+.habit-category-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* ✅ расстояние между привычками */
+  overflow: hidden;
+  padding: 12px 8px; /* ✅ немного воздуха вокруг привычек */
+  transition: all 0.3s ease;
+}
+
+/* 🌌 Общий фон и текст */
+body {
+  background-color: #0b0d10;
+  color: #fff;
+  font-family: "Inter", sans-serif;
 }

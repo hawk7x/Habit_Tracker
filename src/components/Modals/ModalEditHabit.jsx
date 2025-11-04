@@ -3,6 +3,7 @@ import './Modal.css';
 
 function ModalEditHabit({
   habitColors,
+  habitCategories, // ✅ category
   editHabitData,
   setEditHabitData,
   onSave,
@@ -41,6 +42,27 @@ function ModalEditHabit({
         >
           <option value="hours">Hours</option>
           <option value="amount">Amount</option>
+        </select>
+
+        {/* 🔹 Новый select для категории */}
+        <select
+          value={editHabitData.category || habitCategories[0].value}
+          onChange={(e) => setEditHabitData({ ...editHabitData, category: e.target.value })}
+          style={{
+            marginBottom: "1rem",
+            width: "100%",
+            padding: "0.5rem",
+            borderRadius: "5px",
+            border: "1px solid #2f81f7",
+            backgroundColor: "#0e1117",
+            color: "#f0f0f0",
+          }}
+        >
+          {habitCategories.map((c) => (
+            <option key={c.value} value={c.value}>
+              {c.name}
+            </option>
+          ))}
         </select>
 
         <div style={{ marginBottom: "1rem" }}>
