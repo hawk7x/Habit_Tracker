@@ -69,6 +69,13 @@ function App() {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const oldHabits = docSnap.data().habits || [];
+            // удалить привычки со старыми категориями
+            const filtered = oldHabits.filter(h => h.category && habitCategories.some(c => c.value === h.category));
+            setHabits(filtered);
+          }
           setHabits(docSnap.data().habits || []);
         } else {
           await setDoc(docRef, { habits: [] });
@@ -223,6 +230,7 @@ function App() {
             setActiveHabit={setActiveHabit}
             calculateStreak={calculateStreak}
             calculateAverage={calculateAverage}
+            habitCategories={habitCategories} // ✅
           />
         )}
 

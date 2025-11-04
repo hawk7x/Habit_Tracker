@@ -4,15 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import HabitCard from "./HabitCard";
 import "./HabitList.css";
 
-// ✅ Вынесли за пределы компонента (чтобы линтер не ругался)
-const habitCategories = [
-  { name: "Health", value: "health", icon: "💪" },
-  { name: "Study", value: "study", icon: "📚" },
-  { name: "Work", value: "work", icon: "💼" },
-  { name: "Finance", value: "finance", icon: "💰" },
-  { name: "Self-development", value: "self", icon: "🌱" },
-];
-
 function HabitList({
   habits,
   setHabits,
@@ -24,6 +15,7 @@ function HabitList({
   setActiveHabit,
   calculateStreak,
   calculateAverage,
+  habitCategories, // ✅
 }) {
   const [openCategories, setOpenCategories] = useState({});
 
