@@ -16,23 +16,25 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { formatDate, getDatesInRange } from "./utils/helpers";
 import "./App.css";
 
+// ✅
+const habitColors = [
+  { name: "Green", value: "#2ecc71" },
+  { name: "Blue", value: "#3498db" },
+  { name: "Orange", value: "#f39c12" },
+  { name: "Red", value: "#e74c3c" },
+  { name: "Purple", value: "#9b59b6" },
+];
+
+const habitCategories = [
+  { name: "Soul", value: "soul" },
+  { name: "Verse", value: "verse" },
+  { name: "Sport", value: "sport" },
+  { name: "Finance", value: "finance" },
+  { name: "Self-development", value: "self" },
+  { name: "Uncategorized", value: "uncategorized" },
+];
+
 function App() {
-  const habitColors = [
-    { name: "Green", value: "#2ecc71" },
-    { name: "Blue", value: "#3498db" },
-    { name: "Orange", value: "#f39c12" },
-    { name: "Red", value: "#e74c3c" },
-    { name: "Purple", value: "#9b59b6" },
-  ];
-
-  const habitCategories = [
-    { name: "Health", value: "health" },
-    { name: "Study", value: "study" },
-    { name: "Work", value: "work" },
-    { name: "Finance", value: "finance" },
-    { name: "Self-development", value: "self" },
-  ];
-
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem("user");
     return saved ? JSON.parse(saved) : null;
@@ -59,7 +61,6 @@ function App() {
   const oneYearAgo = new Date(today);
   oneYearAgo.setFullYear(today.getFullYear() - 1);
 
-  // 🔹 Загружаем привычки из Firestore после логина
   useEffect(() => {
     if (!user) return;
 
@@ -69,14 +70,11 @@ function App() {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            const oldHabits = docSnap.data().habits || [];
-            // удалить привычки со старыми категориями
-            const filtered = oldHabits.filter(h => h.category && habitCategories.some(c => c.value === h.category));
-            setHabits(filtered);
-          }
-          setHabits(docSnap.data().habits || []);
+          const oldHabits = docSnap.data().habits || [];
+          const filtered = oldHabits.filter(
+            (h) => h.category && habitCategories.some((c) => c.value === h.category)
+          );
+          setHabits(filtered);
         } else {
           await setDoc(docRef, { habits: [] });
           setHabits([]);
@@ -87,9 +85,8 @@ function App() {
     };
 
     loadHabits();
-  }, [user]);
+  }, [user]); // ✅
 
-  // 🔹 Сохраняем привычки в Firestore
   const saveHabitsToFirestore = async (newHabits) => {
     if (!user) return;
     try {
@@ -107,7 +104,7 @@ function App() {
 
     const newHabits = [
       ...habits,
-      { name, type: newHabitType, color: newHabitColor, category: newHabitCategory, data: {} }
+      { name, type: newHabitType, color: newHabitColor, category: newHabitCategory, data: {} },
     ];
 
     setHabits(newHabits);
@@ -178,32 +175,37 @@ function App() {
     return Math.round(values.reduce((a, b) => a + b, 0) / values.length);
   }
 
-  // 🔹 Logout
   const handleLogout = async () => {
     await signOut(auth);
     localStorage.removeItem("user");
     setUser(null);
   };
 
-  // 🔹 Если не залогинен, показываем Login
   if (!user) {
     return <Login onLogin={setUser} />;
   }
 
   return (
     <div className="App">
-      <Header 
+      <Header
         user={user}
-        onShowHome={() => { setShowStats(false); setShowProfile(false); }}
-        onShowStats={() => { setShowStats(true); setShowProfile(false); }}
-        onShowProfile={() => { setShowProfile(true); }}
+        onShowHome={() => {
+          setShowStats(false);
+          setShowProfile(false);
+        }}
+        onShowStats={() => {
+          setShowStats(true);
+          setShowProfile(false);
+        }}
+        onShowProfile={() => {
+          setShowProfile(true);
+        }}
       />
 
       <div style={{ textAlign: "right", padding: "10px" }}>
         <button onClick={handleLogout}>Logout</button>
       </div>
 
-      {/* Показываем цитату и кнопку "Create habit" только на Home */}
       {!showStats && !showProfile && <Quote />}
 
       <main className="main-container">
@@ -212,7 +214,6 @@ function App() {
             <button onClick={() => setModalOpen(true)}>➕ Create habit</button>
           </div>
         )}
-
 
         {showProfile ? (
           <Profile user={user} />
@@ -230,24 +231,23 @@ function App() {
             setActiveHabit={setActiveHabit}
             calculateStreak={calculateStreak}
             calculateAverage={calculateAverage}
-            habitCategories={habitCategories} // ✅
+            habitCategories={habitCategories}
           />
         )}
-
       </main>
 
       {modalOpen && (
         <ModalCreateHabit
           habitColors={habitColors}
-          habitCategories={habitCategories}  // ✅ category
+          habitCategories={habitCategories}
           newHabitName={newHabitName}
           setNewHabitName={setNewHabitName}
           newHabitType={newHabitType}
           setNewHabitType={setNewHabitType}
           newHabitColor={newHabitColor}
           setNewHabitColor={setNewHabitColor}
-          newHabitCategory={newHabitCategory}  // ✅ category
-          setNewHabitCategory={setNewHabitCategory}  // ✅ category
+          newHabitCategory={newHabitCategory}
+          setNewHabitCategory={setNewHabitCategory}
           addHabit={addHabit}
           onClose={() => setModalOpen(false)}
         />
@@ -268,7 +268,7 @@ function App() {
       {editModalOpen && (
         <ModalEditHabit
           habitColors={habitColors}
-          habitCategories={habitCategories}  // ✅ category
+          habitCategories={habitCategories}
           editHabitData={editHabitData}
           setEditHabitData={setEditHabitData}
           onSave={handleEditSave}

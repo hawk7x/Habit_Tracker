@@ -114,10 +114,12 @@ function HabitCard({
                     name: habit.name,
                     type: habit.type,
                     color: habit.color,
+                    category: habit.category || "uncategorized", // ✅ 
                   });
                   setEditModalOpen(true);
                   setMenuOpen(false);
                 }}
+
               >
                 ✏️ Edit
               </div>
