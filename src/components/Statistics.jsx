@@ -56,6 +56,9 @@ function Statistics({ habits }) {
     return { streaks, monthlyActivity };
   }, [habits]);
 
+  // Ограничение длинных названий с многоточием
+  const formatName = (name) => (name.length > 15 ? name.slice(0, 15) + "…" : name);
+
   return (
     <div className="statistics-container">
       <h2 className="title">📊 Progress & Statistics</h2>
@@ -70,29 +73,40 @@ function Statistics({ habits }) {
 
           {/* Лучшие Streak'и */}
           <h3 className="chart-title">🏆 Best Streaks</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={summary.streaks}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="streak" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="chart-animate">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={summary.streaks}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="name"
+                  angle={-30}          // наклон для длинных названий
+                  textAnchor="end"     // выравнивание подписи
+                  interval={0}         // показывать все подписи
+                  height={60}          // увеличиваем высоту оси
+                  tickFormatter={formatName} // обрезка с …
+                />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="streak" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
           {/* Активность за последний месяц */}
           <h3 className="chart-title">📅 Monthly Activity (Number of Habits per Day)</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={summary.monthlyActivity}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="count" stroke="#2ecc71" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+          <div className="chart-animate">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={summary.monthlyActivity}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="count" stroke="#2ecc71" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </>
       )}
     </div>
