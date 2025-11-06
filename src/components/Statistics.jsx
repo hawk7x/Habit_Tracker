@@ -1,6 +1,5 @@
 // src/components/Statistics.jsx
 import React, { useMemo } from "react";
-import './Statistics.css';
 import {
   BarChart,
   Bar,
@@ -13,19 +12,14 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import { formatDate, getDatesInRange } from "../utils/helpers";
 import "./Statistics.css";
 
 function Statistics({ habits }) {
-  // 🔹 Подготовка данных для визуализации
   const summary = useMemo(() => {
-    if (!habits.length) return { averages: [], streaks: [], total: 0 };
+    if (!habits.length) return { streaks: [], monthlyActivity: [] };
 
-    const averages = habits.map((h) => {
-      const values = Object.values(h.data || {});
-      const avg = values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-      return { name: h.name, average: Math.round(avg) };
-    });
-
+    // 🏆 Счёт streak'ов
     const streaks = habits.map((h) => {
       const dates = Object.keys(h.data || {}).sort();
       let best = 0;
@@ -41,48 +35,62 @@ function Statistics({ habits }) {
       return { name: h.name, streak: best };
     });
 
-    const total = averages.reduce((acc, h) => acc + h.average, 0);
-    return { averages, streaks, total };
+    // ✅ Сортируем streak'и по убыванию
+    streaks.sort((a, b) => b.streak - a.streak);
+
+    // 📆 Активность за последний месяц
+    const today = new Date();
+    const oneMonthAgo = new Date(today);
+    oneMonthAgo.setMonth(today.getMonth() - 1);
+    const dates = getDatesInRange(oneMonthAgo, today);
+
+    const monthlyActivity = dates.map((d) => {
+      const key = formatDate(d);
+      let activeCount = 0;
+      habits.forEach((h) => {
+        if (h.data && h.data[key] && h.data[key] > 0) activeCount++;
+      });
+      return { date: key, count: activeCount };
+    });
+
+    return { streaks, monthlyActivity };
   }, [habits]);
 
   return (
     <div className="statistics-container">
-      <h2 className="title">📊 Прогресс и статистика</h2>
+      <h2 className="title">📊 Progress & Statistics</h2>
 
       {habits.length === 0 ? (
-        <p className="empty">Нет данных — начни с добавления привычек!</p>
+        <p className="empty">No data — start by adding some habits!</p>
       ) : (
         <>
           <div className="summary">
-            <p><b>Всего привычек:</b> {habits.length}</p>
-            <p><b>Общий средний прогресс:</b> {summary.total}</p>
-            <p>
-              <b>Лучшая привычка:</b>{" "}
-              {summary.averages.sort((a, b) => b.average - a.average)[0]?.name}
-            </p>
+            <p><b>Total habits:</b> {habits.length}</p>
           </div>
 
-          <h3 className="chart-title">Средние значения</h3>
+          {/* Лучшие Streak'и */}
+          <h3 className="chart-title">🏆 Best Streaks</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={summary.averages}>
+            <BarChart data={summary.streaks}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="average" fill="#82ca9d" />
+              <Bar dataKey="streak" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
 
-          <h3 className="chart-title">Лучшие Streak'и</h3>
+          {/* Активность за последний месяц */}
+          <h3 className="chart-title">📅 Monthly Activity (Number of Habits per Day)</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={summary.streaks}>
+            <LineChart data={summary.monthlyActivity}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
+              <XAxis dataKey="date" />
+              <YAxis allowDecimals={false} />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="streak" stroke="#8884d8" strokeWidth={2} />
+              <Line type="monotone" dataKey="count" stroke="#2ecc71" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         </>
