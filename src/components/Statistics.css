@@ -1,38 +1,41 @@
-/* 🌿 Общий контейнер */
+/* 🌙 Dark Mode Statistics Style */
 .statistics-container {
   padding: 32px;
-  background: linear-gradient(135deg, #ffffff, #f6f9fc);
+  background: linear-gradient(145deg, #1e1e2f, #171722);
   border-radius: 16px;
   margin: 30px auto;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
   max-width: 1000px;
   transition: all 0.3s ease;
+  color: #e5e7eb;
 }
 
 .statistics-container:hover {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
-/* 🔹 Заголовок */
+/* 🔹 Главный заголовок */
 .title {
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
-  background: linear-gradient(90deg, #3b82f6, #9333ea);
+  margin-bottom: 25px;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
 }
 
 /* 🧾 Информация сверху */
 .summary {
-  background: #ffffff;
+  background: rgba(31, 41, 55, 0.8);
   border-radius: 12px;
   padding: 16px 24px;
   margin-bottom: 30px;
   font-size: 1.05rem;
   line-height: 1.7;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   transition: transform 0.2s ease;
 }
 
@@ -41,7 +44,7 @@
 }
 
 .summary b {
-  color: #111827;
+  color: #ffffff;
 }
 
 /* 📊 Заголовки диаграмм */
@@ -49,19 +52,18 @@
   margin: 30px 0 15px 0;
   font-weight: 600;
   font-size: 1.2rem;
-  color: #374151;
+  color: #e5e7eb;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* 🌱 Анимация при наведении */
 .chart-title::after {
   content: "";
   flex: 1;
   height: 2px;
-  background: linear-gradient(90deg, #3b82f6, #9333ea);
-  opacity: 0.4;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  opacity: 0.6;
   border-radius: 2px;
 }
 
@@ -74,15 +76,31 @@
   font-size: 1.1rem;
 }
 
-/* 📉 Улучшаем переходы графиков (если используется Recharts) */
+/* 📉 Контейнер для графиков (Recharts) */
 .recharts-wrapper {
-  background: #fff;
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
+  background: #111827;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .recharts-wrapper:hover {
   transform: scale(1.01);
+  box-shadow: 0 4px 18px rgba(147, 51, 234, 0.3);
+}
+
+/* 🟢 Tooltip стиль Recharts */
+.recharts-default-tooltip {
+  background-color: rgba(30, 30, 46, 0.95) !important;
+  border: 1px solid #4f46e5 !important;
+  border-radius: 8px !important;
+  color: #f9fafb !important;
+  padding: 10px 12px !important;
+  font-size: 0.9rem !important;
+}
+
+/* 🕹️ Плавные переходы */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
