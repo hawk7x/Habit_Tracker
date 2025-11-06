@@ -1,56 +1,79 @@
+/* ===== PROFILE (Dark Card + Light Page) ===== */
+
 .profile-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  padding: 50px 20px;
   animation: fadeIn 0.6s ease-in-out;
+
+  /* фон страницы остаётся как есть */
+  background: none;
 }
 
 .profile-card {
-  background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background: rgba(31, 41, 55, 0.85); /* как статистика */
+  border-radius: 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+
   width: 100%;
-  max-width: 420px;
+  max-width: 450px;
   text-align: center;
-  padding: 30px 25px;
+  padding: 35px 30px;
+
+  backdrop-filter: blur(10px);
+  color: #e5e7eb;
+
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8);
 }
 
-.profile-header {
+/* ==== HEADER TITLE ==== */
+.profile-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  letter-spacing: 0.5px;
+}
+
+/* ==== AVATAR ==== */
+.profile-avatar-section {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .profile-avatar {
   border-radius: 50%;
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  border: 4px solid #a78bfa;
+  box-shadow: 0 6px 18px rgba(167, 139, 250, 0.4);
+
   transition: transform 0.3s ease;
 }
 
 .profile-avatar:hover {
-  transform: scale(1.05);
+  transform: scale(1.07);
 }
 
-.profile-title {
-  font-size: 22px;
-  color: #333;
-  margin-top: 10px;
-}
-
+/* ==== INFO TEXT ==== */
 .profile-info {
   margin-top: 20px;
-  color: #444;
+  color: #e5e7eb;
   font-size: 15px;
 }
 
@@ -58,95 +81,124 @@
   margin: 10px 0;
 }
 
+/* ==== INPUT ==== */
 .profile-input {
   padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  width: 80%;
+  border-radius: 12px;
+
+  background: #111827;
+  color: #e5e7eb;
+
+  border: 1px solid #4f46e5;
+
+  width: 85%;
   font-size: 14px;
   outline: none;
   margin-bottom: 10px;
+
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .profile-input:focus {
-  border-color: #1976d2;
-  box-shadow: 0 0 6px rgba(25, 118, 210, 0.2);
+  border-color: #a78bfa;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
 }
 
+/* ==== BUTTON GROUP ==== */
 .profile-btn-group {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 5px;
 }
 
-.btn-save, .btn-cancel, .btn-edit {
+.btn-save,
+.btn-cancel,
+.btn-edit {
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 8px 16px;
   font-size: 14px;
   cursor: pointer;
+
   transition: all 0.2s ease-in-out;
+  color: #fff;
 }
 
+/* SAVE */
 .btn-save {
-  background: #4caf50;
-  color: #fff;
+  background: linear-gradient(90deg, #4caf50, #81c784);
 }
 
 .btn-save:hover {
-  background: #43a047;
   transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
 }
 
+/* CANCEL */
 .btn-cancel {
-  background: #e0e0e0;
-  color: #333;
+  background: #6b7280;
+  color: #f3f4f6;
 }
 
 .btn-cancel:hover {
-  background: #ccc;
+  background: #4b5563;
   transform: translateY(-2px);
 }
 
+/* EDIT */
 .btn-edit {
-  background: #1976d2;
-  color: #fff;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
   margin-top: 15px;
 }
 
 .btn-edit:hover {
-  background: #1565c0;
   transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3);
 }
 
+/* ==== FOOTER ==== */
 .profile-footer {
-  margin-top: 20px;
-  border-top: 1px solid #eee;
+  margin-top: 25px;
+  border-top: 1px solid #374151;
   padding-top: 15px;
 }
 
 .profile-level {
   font-weight: 500;
-  color: #555;
+  color: #e5e7eb;
   font-size: 15px;
+
   animation: fadeInUp 0.6s ease-in-out;
 }
 
+/* ==== LOADING ==== */
 .profile-loading {
   text-align: center;
-  color: #555;
-  margin-top: 50px;
+  color: #e5e7eb;
+  margin-top: 60px;
   font-size: 16px;
 }
 
-/* 🔹 Анимации */
+/* ==== ANIMATIONS ==== */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

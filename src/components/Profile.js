@@ -13,7 +13,12 @@ function Profile({ user }) {
       const docRef = doc(db, "profiles", user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) setProfile(docSnap.data());
-      else setProfile({ email: user.email, displayName: user.displayName, photoURL: user.photoURL });
+      else
+        setProfile({
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        });
     };
     loadProfile();
   }, [user]);
@@ -32,13 +37,14 @@ function Profile({ user }) {
   return (
     <div className="profile-wrapper">
       <div className="profile-card">
-        <div className="profile-header">
+        <h1 className="profile-title">👤 Profile</h1>
+
+        <div className="profile-avatar-section">
           <img
             src={profile.photoURL || "https://via.placeholder.com/120"}
             alt="avatar"
             className="profile-avatar"
           />
-          <h2 className="profile-title">👤 Profile</h2>
         </div>
 
         <div className="profile-info">
@@ -76,9 +82,7 @@ function Profile({ user }) {
         </div>
 
         <div className="profile-footer">
-          <p className="profile-level">
-            🏆 Level 3 Habit Builder
-          </p>
+          <p className="profile-level">🏆 Level 3 Habit Builder</p>
         </div>
       </div>
     </div>
