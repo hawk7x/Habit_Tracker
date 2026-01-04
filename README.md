@@ -1,70 +1,124 @@
-# Getting Started with Create React App
+# Habit Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern **habit tracking web application** inspired by GitHub-style heatmaps.  
+Track your daily habits, analyze streaks, visualize progress, and stay motivated with a clean UI and Firebase-powered backend.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+### Habit Management
+- Create, edit, and delete habits
+- Habit types:
+  - **Hours** (time-based tracking)
+  - **Amount** (numeric tracking)
+- Custom habit colors
+- Habit categories:
+  - Soul
+  - Verse
+  - Sport
+  - Finance
+  - Self-development
+  - Uncategorized
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### GitHub-Style Heatmap
+- Visualizes activity for the **last 365 days**
+- Dynamic color intensity based on value
+- Hover to preview date
+- Click any day to:
+  - Add or edit value
+  - Attach a comment/note
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Daily Notes
+- Save a numeric value and a text comment per day
+- Clean, focused modal UI
+- Notes are stored per habit & per date
 
-### `npm test`
+### Statistics
+- Current streak calculation
+- Average value per habit
+- Visual analytics:
+  - Monthly activity (Line Chart)
+  - Best streaks (Bar Chart)
+- Built using **Recharts**
+- Optimized with `useMemo`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Authentication & Profile
+- Firebase Authentication:
+  - Email & Password
+  - Google Sign-In
+- User profile with:
+  - Display name
+  - Avatar initials
+- Secure per-user data isolation
 
-### `npm run build`
+### Cloud Storage
+- Firebase Firestore
+- Automatic syncing of habits
+- Each user has their own document
+- Persistent data across sessions
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### UI / UX
+- Dark mode by default
+- Smooth animations
+- Custom modal components
+- Responsive layout
+- Minimal, modern design
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tech Stack
 
-### `npm run eject`
+**Frontend**
+- React
+- Hooks (`useState`, `useEffect`, `useMemo`)
+- Custom CSS
+- Framer Motion
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Backend / Services**
+- Firebase
+  - Authentication
+  - Firestore
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Charts**
+- Recharts
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Data Model Example, Getting Started & Future Improvements
 
-## Learn More
+```js
+// Example habit data
+{
+  name: "Reading",
+  type: "hours",
+  color: "#2ecc71",
+  category: "self",
+  data: {
+    "2025-01-01": 45
+  },
+  comments: {
+    "2025-01-01": "Very focused session"
+  }
+}
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+// 🚀 Getting Started
+// 1. Clone the repository
+// git clone https://github.com/your-username/habit-tracker.git
+// cd habit-tracker
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+// 2. Install dependencies
+// npm install
 
-### Code Splitting
+// 3. Run the app
+// npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+// The app will be available at: http://localhost:3000
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+// 🔮 Future Improvements
+// Habit goals
+// Weekly & monthly summaries
+// Notifications
+// Data export (CSV)
+// Mobile-first enhancements
+// Premium features
