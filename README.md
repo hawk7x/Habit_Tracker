@@ -21,6 +21,8 @@ Track your daily habits, analyze streaks, visualize progress, and stay motivated
   - Self-development
   - Uncategorized
 
+---
+
 ### GitHub-Style Heatmap
 - Visualizes activity for the **last 365 days**
 - Dynamic color intensity based on value
@@ -29,10 +31,14 @@ Track your daily habits, analyze streaks, visualize progress, and stay motivated
   - Add or edit value
   - Attach a comment/note
 
+---
+
 ### Daily Notes
 - Save a numeric value and a text comment per day
 - Clean, focused modal UI
 - Notes are stored per habit & per date
+
+---
 
 ### Statistics
 - Current streak calculation
@@ -43,6 +49,8 @@ Track your daily habits, analyze streaks, visualize progress, and stay motivated
 - Built using **Recharts**
 - Optimized with `useMemo`
 
+---
+
 ### Authentication & Profile
 - Firebase Authentication:
   - Email & Password
@@ -52,11 +60,15 @@ Track your daily habits, analyze streaks, visualize progress, and stay motivated
   - Avatar initials
 - Secure per-user data isolation
 
+---
+
 ### Cloud Storage
 - Firebase Firestore
 - Automatic syncing of habits
 - Each user has their own document
 - Persistent data across sessions
+
+---
 
 ### UI / UX
 - Dark mode by default
@@ -85,40 +97,42 @@ Track your daily habits, analyze streaks, visualize progress, and stay motivated
 
 ---
 
-## Data Model Example, Getting Started & Future Improvements
+## Data Model Example
 
-```js
-// Example habit data
 {
-  name: "Reading",
-  type: "hours",
-  color: "#2ecc71",
-  category: "self",
-  data: {
+  "name": "Reading",
+  "type": "hours",
+  "color": "#2ecc71",
+  "category": "self",
+  "data": {
     "2025-01-01": 45
   },
-  comments: {
+  "comments": {
     "2025-01-01": "Very focused session"
   }
 }
 
-// 🚀 Getting Started
-// 1. Clone the repository
-// git clone https://github.com/your-username/habit-tracker.git
-// cd habit-tracker
+---
 
-// 2. Install dependencies
-// npm install
+## 🚀 Getting Started & 🔮 Future Improvements
 
-// 3. Run the app
-// npm start
+# Getting Started
+1️⃣ Clone the repository
+git clone https://github.com/your-username/habit-tracker.git
+cd habit-tracker
 
-// The app will be available at: http://localhost:3000
+2️⃣ Install dependencies
+npm install
 
-// 🔮 Future Improvements
-// Habit goals
-// Weekly & monthly summaries
-// Notifications
-// Data export (CSV)
-// Mobile-first enhancements
-// Premium features
+3️⃣ Run the app
+npm start
+
+The app will be available at: http://localhost:3000
+
+# Future Improvements
+- Habit goals
+- Weekly & monthly summaries
+- Notifications
+- Data export (CSV)
+- Mobile-first enhancements
+- Premium features
