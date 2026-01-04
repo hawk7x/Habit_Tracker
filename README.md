@@ -141,7 +141,7 @@ The app will be available at: http://localhost:3000
 
 ## Screenshots
 
-![Screenshot 1](https://github.com/user-attachments/assets/7ddc7516-7e81-4f47-8856-3a02af0e0acd)
+![Screenshot 1](https://github.com/user-attachments/assets/e36998d1-d0d1-4459-92a2-c98a70d05d3a)
 
 ---
 
