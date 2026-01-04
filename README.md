@@ -153,3 +153,7 @@ The app will be available at: http://localhost:3000
 ![Screenshot 3](https://github.com/user-attachments/assets/35d6979e-9412-419f-a24c-60aa9352267c)
 
 ---
+
+## Video Demo
+
+[![Habit tracker](https://github.com/user-attachments/assets/7ddc7516-7e81-4f47-8856-3a02af0e0acd)](https://youtu.be/UpeAqgq15Ow)
