@@ -136,3 +136,17 @@ The app will be available at: http://localhost:3000
 - Data export (CSV)
 - Mobile-first enhancements
 - Premium features
+
+---
+
+## Screenshots
+
+![Screenshot 1](https://github.com/user-attachments/assets/35d6979e-9412-419f-a24c-60aa9352267c)
+
+---
+
+![Screenshot 2](https://github.com/user-attachments/assets/baed217f-d766-4fba-bdc9-e922512e58e8)
+
+---
+
+![Screenshot 3](https://github.com/user-attachments/assets/1c161949-7e90-40ee-9195-e1353e31378d)
